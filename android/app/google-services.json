@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "219219731078",
+    "project_id": "compan-df216",
+    "storage_bucket": "compan-df216.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219219731078:android:f90aa7034414715332e707",
+        "android_client_info": {
+          "package_name": "com.ospreyx.compan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "219219731078-qt4el7lcv261hkba80hf4hdu2k19q8a6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ospreyx.compan",
+            "certificate_hash": "913c45efed65b35fc6b8401befc8b46cca849dd9"
+          }
+        },
+        {
+          "client_id": "219219731078-81etbr18tmk2qlr1umll4sl4su0cq5o8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFN1QRkuicqV3AuqhwzDLNjHnB_FLztt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "219219731078-81etbr18tmk2qlr1umll4sl4su0cq5o8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
