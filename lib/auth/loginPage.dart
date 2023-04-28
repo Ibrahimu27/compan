@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:compan/auth/registerPage.dart';
-import 'package:compan/constants.dart';
 import 'package:compan/pages/homePage.dart';
 import 'package:compan/services/auth_service.dart';
 import 'package:compan/services/database_service.dart';
@@ -20,9 +19,14 @@ class _loginPageState extends State<loginPage> {
 
   final formKey = GlobalKey<FormState>();
   String email = "";
+  String emailSaved = "";
+  String userNameSaved = "";
   String password = "";
   bool isLoading = false;
   AuthService authService = AuthService();
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +65,7 @@ class _loginPageState extends State<loginPage> {
                   height: 50,
                 ),
                  TextFormField(
+                   controller: emailController,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.email),
                     label: Text("email"),
@@ -128,11 +133,11 @@ class _loginPageState extends State<loginPage> {
                 Text.rich(
                     TextSpan(
                       text: "Don't Have An Account ",
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+                      style: const TextStyle(color: Colors.black, fontSize: 14),
                       children: <TextSpan>[
                         TextSpan(
                           text: "Register Here",
-                          style: TextStyle(color: Colors.black, decoration: TextDecoration.underline),
+                          style: const TextStyle(color: Colors.black, decoration: TextDecoration.underline),
                           recognizer: TapGestureRecognizer()..onTap = (){
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const registePage()));
                           }),
@@ -153,31 +158,40 @@ class _loginPageState extends State<loginPage> {
     if(formKey.currentState!.validate());
     setState(() {
       isLoading = true;
+      emailSaved = emailController.text;
     });
 
     await authService.loginWithEmailAndPassword(email, password).then((value) async {
       if(value == true){
         QuerySnapshot snapshot = await DatabaseServices(uid: FirebaseAuth.instance.currentUser!.uid).gettingUserData(email);
 
+        // setState(() {
+        //   emailSaved = emailController.text;
+        // });
+
         //saving values to the shared preferences
         await helperFunction.saveUserLoggedInStatus(true);
-        await helperFunction.SaveUserEmailSF(email);
+        await helperFunction.SaveUserEmailSF(emailSaved);
+        await helperFunction.saveUserEmail(emailSaved);
         await helperFunction.SaveUserNameSF(
             snapshot.docs[0]['fullname']);
 
-        nextScreenReplaced(context, homePage());
+       // nextScreenReplaced(context,  const homePage());
+
+        Navigator.push(context, MaterialPageRoute(builder:(context) =>homePage()));
 
       }else{
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Incorrect UserName Or Password'),
-              duration: Duration(seconds: 2),
+              content: const Text('Incorrect UserName Or Password'),
+              duration: const Duration(seconds: 2),
               action: SnackBarAction(
                 label: 'Close',
                 onPressed: (){
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 },
               ),
+
             ));  //showa a snackbar
       }
     });

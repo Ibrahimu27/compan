@@ -6,6 +6,7 @@ class AuthService{
 
   //register
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
   Future registerUserWithEmailAndPassword(String fullName, String email, String password) async {
     try {
       User user = ( await firebaseAuth.createUserWithEmailAndPassword(
@@ -47,7 +48,4 @@ class AuthService{
      return null;
    }
   }
-
-
-  //login
 }

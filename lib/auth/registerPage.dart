@@ -20,7 +20,12 @@ class _registePageState extends State<registePage> {
   String password = "";
   String fullName = "";
   bool isLoading = false;
+  String emailSaved = "";
+  String usernameSaved = "";
   AuthService authService = AuthService();
+
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +68,7 @@ class _registePageState extends State<registePage> {
                   ),
 
                   TextFormField(
+                    controller: userNameController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.person),
                       label: Text("Full Name"),
@@ -77,7 +83,7 @@ class _registePageState extends State<registePage> {
                     },
 
                     onChanged: (val){
-                      email = val;
+                      fullName = val;
                     },
                   ),
 
@@ -86,6 +92,7 @@ class _registePageState extends State<registePage> {
                   ),
 
                   TextFormField(
+                    controller: emailController,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.email),
                       label: Text("email"),
@@ -142,7 +149,6 @@ class _registePageState extends State<registePage> {
                         ),
                         onPressed: (){
                           register();
-
                         },
                         child: const Text( "Submit" )),
                   ),
@@ -162,13 +168,10 @@ class _registePageState extends State<registePage> {
                                 recognizer: TapGestureRecognizer()..onTap = (){
                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const loginPage()));
                                 }),
-
                           ]
                       ))
-
                 ],
               ),
-
             ),
           ),
         )
@@ -178,14 +181,16 @@ class _registePageState extends State<registePage> {
   register() async {
     if (formKey.currentState!.validate()){
       setState(() {
+        usernameSaved = userNameController.text;
+        emailSaved = emailController.text;
         isLoading = true;
       });
       await authService.registerUserWithEmailAndPassword(fullName, email, password).then((value) async{
         if(value == true){
           //saving the shared preference state
-          await helperFunction.saveUserLoggedInStatus(true);
-          await helperFunction.SaveUserEmailSF(email);
-          await helperFunction.SaveUserNameSF(fullName);
+           helperFunction.saveUserLoggedInStatus(true);
+           helperFunction.SaveUserEmailSF(emailSaved);
+           helperFunction.SaveUserNameSF(usernameSaved);
           nextScreen(context, const homePage());
 
         }else{

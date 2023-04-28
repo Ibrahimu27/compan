@@ -25,5 +25,37 @@ Future gettingUserData(String email) async {
     return snapshot;
 }
 
+//retrieving user groups
+getUserGroups() async {
+    return userCollection.doc(uid).snapshots();
+}
+
+//creating group function
+Future createGroup(String userName, String UserId, String groupName ) async{
+    DocumentReference groupDocumentRefernce = await groupCollection.add({
+      "groupname": groupName,
+      "groupIcon": "",
+      "admin": "${UserId}_$userName",
+      "memebers": [],
+      "groupId": "",
+      "recentMessage": "",
+      "recentMessageCender": "",
+    });
+
+//update reference datas
+  await groupDocumentRefernce.update({
+    "members": FieldValue.arrayUnion(["${uid}_$userName"]),
+    "groupId":  groupDocumentRefernce.id,
+  });
+  
+//updating group informations on usertable/user collection
+  DocumentReference userDocumentRefence = userCollection.doc(uid);
+  return await userDocumentRefence.update({
+    "groups": FieldValue.arrayUnion(["${groupDocumentRefernce.id}_$groupName"])
+  });
+}
+
+
+
 }
 
